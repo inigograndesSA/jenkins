@@ -107,16 +107,10 @@ curl -X POST http://localhost:8010/reload/ \
 ```bash
 docker stop jenkins && docker rm jenkins
 ```
-# Pull new image
+### Pull new image
 ```bash
 docker pull jenkins/jenkins:lts
 ```
-
-
-
-
-
-
 ## Git Workflow for diary rutine
 ### Clone Repository
 ```bash
