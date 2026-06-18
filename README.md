@@ -21,6 +21,35 @@ This main folder (jenkins2) could be created on any directory of the Host, but f
 **plugins.txt:** file to add all the plugins needed for Jenkins
 **docker-compose.yml:** in our case, this file is responsible for launching and starting the container
 
+#### docker-compose.yml
+This file is the most important one, which orquestrates the building of the image. Docker-compose is for the configuration of services, network, volumes..., allowing to build up all the infrastructure with one command.
+![Docker compose](./img/DockerComposeJenkins.png)
+
+Most important options to configure:
+**ports**: it allows to configure the host opened port and the docker opened port. It means, Docker expose the Jenkins service to the host on port 8081, and the application inside Docker, will be "hearing" on port 8080.
+**volumes**: it allow to persist data and share files between host and Docker.
+
+#### Dockerfile
+This file are the steps to follow for building the image. Simple example:
+
+![Dockerfile](./img/DockerfileJenkins.png)
+
+This file is the most important one, which orquestrates the building of the image. Docker-compose is for the configuration of services, network, volums..., allowing to build up all the infrastructure with one command.
+
+1. First of all, the first question to answer is, which version do we want? (Last version releases on: https://www.jenkins.io/changelog-stable/)
+2. Depends on how we have configurated the environment, we will need to use the user "root" to run the following commands.
+3. In this case, as we want "plugins as code", we will need to add the plugins file to **"/usr/share/jenkins/ref"** directory that is used on Jenkins facilities which is the initial configuration template (first run of the container)
+4. "Configuration as code" file, will be added on **/var/jenkins_home"**, which is the directory for persistent data (real data).
+5. Finally, use the secure user with no privilieges as "jenkins" in this case.
+
+**Difference between /usr/share/jenkins/ref and /var/jenkins_home**: the difference is that each one is used for different things. The first one, is used for the main configuration template of the first boot of the container, the second one, for the container information to persist between the host and the container.
+
+#### plugins.txt
+On this file, we will be adding the plugins that our application will need (All available plugins on: https://plugins.jenkins.io/)
+
+![Plugins](./img/PluginsJenkins.png)
+
+The most important plugin in our case is "configuration as code" plugin, which let Jenkins to configure with "caac.yaml" file.
 
 ## Git Workflow for diary rutine
 ### Clone Repository
