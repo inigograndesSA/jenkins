@@ -21,7 +21,8 @@ This main folder (jenkins2) could be created on any directory of the Host, but f
 **plugins.txt:** file to add all the plugins needed for Jenkins
 **docker-compose.yml:** in our case, this file is responsible for launching and starting the container
 
-#### docker-compose.yml
+#### FILES
+##### Docker-compose.yml
 This file is the most important one, which orquestrates the building of the image. Docker-compose is for the configuration of services, network, volumes..., allowing to build up all the infrastructure with one command.
 ![Docker compose](./img/DockerComposeJenkins.png)
 
@@ -29,7 +30,7 @@ Most important options to configure:
 **ports**: it allows to configure the host opened port and the docker opened port. It means, Docker expose the Jenkins service to the host on port 8081, and the application inside Docker, will be "hearing" on port 8080.
 **volumes**: it allow to persist data and share files between host and Docker.
 
-#### Dockerfile
+##### Dockerfile
 This file are the steps to follow for building the image. Simple example:
 
 ![Dockerfile](./img/DockerfileJenkins.png)
@@ -44,12 +45,77 @@ This file is the most important one, which orquestrates the building of the imag
 
 **Difference between /usr/share/jenkins/ref and /var/jenkins_home**: the difference is that each one is used for different things. The first one, is used for the main configuration template of the first boot of the container, the second one, for the container information to persist between the host and the container.
 
-#### plugins.txt
+##### Caac.yml
+File for the global Jenkins configuration (global variables, credentials...)
+
+![Configuration as code](./img/Caac.png)
+
+We can configure everything needed for the Jenkins application, users, security, credentials, credentials providers, appearance, nodes/agents...
+
+##### Plugins.txt
 On this file, we will be adding the plugins that our application will need (All available plugins on: https://plugins.jenkins.io/)
 
 ![Plugins](./img/PluginsJenkins.png)
 
 The most important plugin in our case is "configuration as code" plugin, which let Jenkins to configure with "caac.yaml" file.
+
+## Docker Workflow for diary rutine
+### State
+```bash
+docker compose ps
+```
+### Start, stop and restart docker compose
+```bash
+docker compose up -d #Start all on background
+```
+```bash
+docker compose ps -d jenkins #Only jenkins service
+```
+```bash
+docker compose down #Stop and delete containers (volumes persist)
+```
+
+```bash
+docker stop jenkins #Stop without deleting container
+```
+
+```bash
+docker start jenkins #Start existing container
+```
+
+```bash
+docker restart jenkins #Restart container
+```
+
+### Full logs
+```bash
+docker logs jenkins
+```
+
+### Enter to container
+```bash
+docker exec -it jenkins bash/sh #it: interactive shell
+```
+
+### Configuration Hot Reaload (caac.yml)
+```bash
+curl -X POST http://localhost:8010/reload/ \
+  --user admin:TOKEN_API
+```
+
+### Stop and delete container (volume persist)
+```bash
+docker stop jenkins && docker rm jenkins
+```
+# Pull new image
+```bash
+docker pull jenkins/jenkins:lts
+```
+
+
+
+
+
 
 ## Git Workflow for diary rutine
 ### Clone Repository
