@@ -10,7 +10,9 @@ This is going to be Docker+Jenkins guide to configure as **Code**.
 ### GUIDE (from structure to deploy)
 #### STRUCTURE FOR JENKINS FOLDER
 This main folder (jenkins2) could be created on any directory of the Host, but for this example, I am going to use "/opt" which is the directory where third party software is installed on this distribution.
+
 ![Main folder](./img/MainFolderJenkins.png)
+
 **jenkins2:** the main folder where all the files will be stored
 **certs:** kings... is the certification of our DC
 **config:** folder where are all the files required for the build of the image will be stored
