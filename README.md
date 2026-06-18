@@ -62,7 +62,7 @@ The most important plugin in our case is "configuration as code" plugin, which l
 #### EXECUTION EXAMPLE
 Example of the steps to continue to build the image correctly:
 
-![Docker execution](./img/DockerComposeJenkins.png)
+![Docker execution](./img/DockercomposeExecutionJenkins.png)
 
 
 ## Docker Workflow for diary rutine
