@@ -1,22 +1,25 @@
-# Git Workflow and Best Practices
+# Docker&Git Workflow and Best Practices
+I have created this repository for future developments to make more simple and easy escalable projects, which developers could use with a guided way taking the best practices to have a Docker environment running Jenkins (on our case) on a Linux based Host.
 
-## Clone Repository
+## Docker Workflow and Best Practices
+
+### Clone Repository
 ```bash
 git clone https://repositorio.git
 ```
 
-## Access Repository
+### Access Repository
 ```bash
 cd repositorio
 ```
 
-## Initial Configuration
+### Initial Configuration
 ```bash
 git config --global user.name "nombre"
 git config --global user.email "email"
 ```
 
-## Daily Workflow
+### Daily Workflow
 See state
    ```bash
 git status
@@ -38,7 +41,7 @@ Get remote changes from GitHub repository
 git pull origin main
    ```
 
-## Good Practices
+### Good Practices
 Show branches
    ```bash
 git branch
@@ -55,3 +58,9 @@ Merge changes from a branch (e.g., example-branch into current branch)
    ```bash
 git merge example-branch
 ```
+
+
+
+
+
+
