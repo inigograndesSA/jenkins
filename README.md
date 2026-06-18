@@ -23,7 +23,7 @@ This main folder (jenkins2) could be created on any directory of the Host, but f
 
 #### FILES
 ##### Docker-compose.yml
-This file is the most important one, which orquestrates the building of the image. Docker-compose is for the configuration of services, network, volumes..., allowing to build up all the infrastructure with one command.
+This file orchestrate containers (ports, volumes, network, enivonment variables)
 ![Docker compose](./img/DockerComposeJenkins.png)
 
 Most important options to configure:
@@ -42,6 +42,9 @@ This file is the most important one, which orquestrates the building of the imag
 3. In this case, as we want "plugins as code", we will need to add the plugins file to **"/usr/share/jenkins/ref"** directory that is used on Jenkins facilities which is the initial configuration template (first run of the container)
 4. "Configuration as code" file, will be added on **/var/jenkins_home"**, which is the directory for persistent data (real data).
 5. Finally, use the secure user with no privilieges as "jenkins" in this case.
+
+Notice that, the password, is in plain text, this error happens a lot of times. Then, what I have to write on that variable?
+I have to write on that plain text variable: ${SECRET_PASSWORD_ENV} which will be linked to a .env hidden file
 
 **Difference between /usr/share/jenkins/ref and /var/jenkins_home**: the difference is that each one is used for different things. The first one, is used for the main configuration template of the first boot of the container, the second one, for the container information to persist between the host and the container.
 
@@ -75,7 +78,7 @@ docker compose ps
 docker compose up -d #Start all on background
 ```
 ```bash
-docker compose ps -d jenkins #Only jenkins service
+docker compose ps jenkins #Only jenkins service
 ```
 ```bash
 docker compose down #Stop and delete containers (volumes persist)
@@ -105,7 +108,7 @@ docker exec -it jenkins bash/sh #it: interactive shell
 
 ### Configuration Hot Reaload (caac.yml)
 ```bash
-curl -X POST http://localhost:8010/reload/ \
+curl -X POST http://localhost:8001/reload-configuration-as-code/ \
   --user admin:TOKEN_API
 ```
 
