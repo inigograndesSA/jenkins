@@ -1,73 +1,83 @@
-# Docker&Git Workflow for Jenkins CI/CD
-This repository has been created for future developments to make more simple and easy escalable projects, which developers could use with a guided way taking the best practices to have Jenkins running on Docker environment (on our case) on a Linux based Host.
+# Docker & Git Workflow for Jenkins CI/CD
+This repository has been created to help and save time developing containerized applications for future SENDAudit developers. 
 
-## Docker Workflow for Jenkins CI/CD
-This is going to be Docker+Jenkins guide to configure as **Code**.
+## Docker Workflow for Jenkins
+Docker & Jenkins **guide** to configure it **as code**:
 1. Jenkins infrastructure (docker, servers, agents, plugins, ...)
 2. Jenkins job configuration (stages, builds, triggers, ...)
 3. Jenkins system configuration (credentials, LDAP, ...)
 
-### GUIDE (from structure to deploy)
-#### STRUCTURE FOR JENKINS FOLDER
-This main folder (jenkins2) could be created on any directory of the Host, but for this example, I am going to use "/opt" which is the directory where third party software is installed on this distribution.
+### Guide (from directory structure to application deploy)
+#### Docker folder structure
+
+This main folder (jenkins2) could be created on any directory of the **host**, but for this example, I am going to use "/opt" which is the directory where third party software is installed on this distribution.
 
 ![Main folder](./img/MainFolderJenkins.png)
 
-**jenkins2:** the main folder where all the files will be stored
-**certs:** kings... is the certification of our DC
-**config:** folder where are all the files required for the build of the image will be stored
-**casc.yaml** (configuration as code): file to configure the configuration of Jenkins globally
-**Dockerfile:** it is like the recipient for a meal, these are the steps to make the image
-**plugins.txt:** file to add all the plugins needed for Jenkins
-**docker-compose.yml:** in our case, this file is responsible for launching and starting the container
+**jenkins2:** main folder for storaging all files for this proyect
 
-#### FILES
+**certs:** kingslanding file is the certification of our DC
+
+**config:** main folder where the files for building the image will be stored
+
+**casc.yaml (configuration as code)**: file to configure the configuration of Jenkins globally
+
+**Dockerfile:** file with the steps for building the image
+
+**plugins.txt:** file with selected plugins for Jenkins
+
+**docker-compose.yml:** file responsible for launching and starting the container with desired files
+
+#### Docker files
 ##### Docker-compose.yml
-This file orchestrate containers (ports, volumes, network, enivonment variables)
+
+This file is the orchestrator for building the image on the container (ports, volumes, network, enivonment variables)
 
 ![Docker compose](./img/DockerComposeJenkins.png)
 
-Most important options to configure:
+Options to configure:
+
 **ports**: it allows to configure the host opened port and the docker opened port. It means, Docker expose the Jenkins service to the host on port 8081, and the application inside Docker, will be "hearing" on port 8080.
 **volumes**: it allow to persist data and share files between host and Docker.
 
-This file is the most important one, which orquestrates the building of the image. Docker-compose is for the configuration of services, network, volums..., allowing to build up all the infrastructure with one command.
-
-1. First of all, the first question to answer is, which version do we want? (Last version releases on: https://www.jenkins.io/changelog-stable/)
-2. Depends on how we have configurated the environment, we will need to use the user "root" to run the following commands.
-3. In this case, as we want "plugins as code", we will need to add the plugins file to **"/usr/share/jenkins/ref"** directory that is used on Jenkins facilities which is the initial configuration template (first run of the container)
+1. First option to configure is the Jenkins service version (last version releases on: https://www.jenkins.io/changelog-stable/)
+2. I am going to use root user for the execution of next operations so I won't have permissions execution problems
+3. I need to add the plugins file to **"/usr/share/jenkins/ref"** directory that is used by Jenkins facilities which is the initial configuration template (first run of the container)
 4. "Configuration as code" file, will be added on **/var/jenkins_home"**, which is the directory for persistent data (real data).
-5. Finally, use the secure user with no privilieges as "jenkins" in this case.
+5. Switch root user to "no priviliege" user
 
 ##### Dockerfile
-This file are the steps to follow for building the image. Simple example:
+
+This file contains the steps to follow for building the image.
 
 ![Dockerfile](./img/DockerfileJenkins.png)
 
-Notice that, the password, is in plain text, this error happens a lot of times. Then, what I have to write on that variable?
-I have to write on that plain text variable: ${SECRET_PASSWORD_ENV} which will be linked to a .env hidden file
+On this example, the password is on plain text which could led to mayor security problems. The best choice is to write the password on an external **file**.
+The variable declared on this file is SECRET_PASSWORD_ENV, the Dockerfile variable would look like this: ${SECRET_PASSWORD_ENV} which will be linked to a **.env hidden file**
 
-**Difference between /usr/share/jenkins/ref and /var/jenkins_home**: the difference is that each one is used for different things. The first one, is used for the main configuration template of the first boot of the container, the second one, for the container information to persist between the host and the container.
+Difference between **/usr/share/jenkins/ref** and **/var/jenkins_home**: the main difference is what is used for each directory. The first one, is used for the main configuration template of the first boot of the container, the second one, for the container information to persist between the host and the container.
 
 ##### Caac.yml
+
 File for the global Jenkins configuration (global variables, credentials...)
 
 ![Configuration as code](./img/Caac.png)
 
-We can configure everything needed for the Jenkins application, users, security, credentials, credentials providers, appearance, nodes/agents...
+We can configure everything needed for Jenkins application on this file (users, security, credentials, credentials providers, appearance, nodes/agents...)
 
 ##### Plugins.txt
-On this file, we will be adding the plugins that our application will need (All available plugins on: https://plugins.jenkins.io/)
+
+On this file, we will be adding the plugins wanted for our application (all available plugins on: https://plugins.jenkins.io/)
 
 ![Plugins](./img/PluginsJenkins.png)
 
-The most important plugin in our case is "configuration as code" plugin, which let Jenkins to configure with "caac.yaml" file.
+The most important plugin in our case is "configuration as code" plugin, which let us configure Jenkins **configuration as code**.
 
-#### EXECUTION EXAMPLE
-Example of the steps to continue to build the image correctly:
+#### Container deployment
+
+Example build the image correctly:
 
 ![Docker execution](./img/DockercomposeExecutionJenkins.png)
-
 
 ## Docker Workflow for diary rutine
 ### State
