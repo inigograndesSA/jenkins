@@ -24,16 +24,12 @@ This main folder (jenkins2) could be created on any directory of the Host, but f
 #### FILES
 ##### Docker-compose.yml
 This file orchestrate containers (ports, volumes, network, enivonment variables)
+
 ![Docker compose](./img/DockerComposeJenkins.png)
 
 Most important options to configure:
 **ports**: it allows to configure the host opened port and the docker opened port. It means, Docker expose the Jenkins service to the host on port 8081, and the application inside Docker, will be "hearing" on port 8080.
 **volumes**: it allow to persist data and share files between host and Docker.
-
-##### Dockerfile
-This file are the steps to follow for building the image. Simple example:
-
-![Dockerfile](./img/DockerfileJenkins.png)
 
 This file is the most important one, which orquestrates the building of the image. Docker-compose is for the configuration of services, network, volums..., allowing to build up all the infrastructure with one command.
 
@@ -42,6 +38,11 @@ This file is the most important one, which orquestrates the building of the imag
 3. In this case, as we want "plugins as code", we will need to add the plugins file to **"/usr/share/jenkins/ref"** directory that is used on Jenkins facilities which is the initial configuration template (first run of the container)
 4. "Configuration as code" file, will be added on **/var/jenkins_home"**, which is the directory for persistent data (real data).
 5. Finally, use the secure user with no privilieges as "jenkins" in this case.
+
+##### Dockerfile
+This file are the steps to follow for building the image. Simple example:
+
+![Dockerfile](./img/DockerfileJenkins.png)
 
 Notice that, the password, is in plain text, this error happens a lot of times. Then, what I have to write on that variable?
 I have to write on that plain text variable: ${SECRET_PASSWORD_ENV} which will be linked to a .env hidden file
@@ -176,7 +177,6 @@ Merge changes from a branch (e.g., example-branch into current branch)
    ```bash
 git merge example-branch
 ```
-
 
 
 
